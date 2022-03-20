@@ -8,6 +8,33 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type Method int
+
+const (
+	GET Method = iota
+	POST
+)
+
+func (m Method) String() string {
+	return [...]string{"GET", "POST"}[m]
+}
+
+// type HTTP string
+
+// const (
+// 	GET  = HTTP("GET")
+// 	POST = HTTP("POST")
+// )
+
+//go:generate stringer -type=Method
+// type Method int
+
+// const (
+// 	GET Method = iota
+// 	POST
+// 	PUT
+// )
+
 func main() {
 	// Define router to handle complex routing requests
 	r := mux.NewRouter()
@@ -26,6 +53,13 @@ func main() {
 		// get the book
 		// navigate to page
 	})
+
+	handleReadBook := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("Should only be handle GET requests")
+	}
+
+	// Handle only specific requests (mock via Postman)
+	r.HandleFunc("/books/{title}", handleReadBook).Methods(fmt.Sprintf("%s", GET))
 
 	// Serve static assets: Serve Javascript, CSS and images to browsers
 	// 1. Build a fileserver
